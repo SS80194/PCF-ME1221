@@ -1,9 +1,6 @@
 import {Text,StyleSheet,Dimensions,ScrollView,View} from "react-native"
 import {useState,useEffect,useContext} from "react"
 import styles from "../StyleSheet.js"
-import {SimpData} from "../../../App.js"
-import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer'
 
 
 const window_width=Dimensions.get('window').width;
@@ -59,16 +56,5 @@ export default function DatePage()
     if(simp) return <FlowPage></FlowPage>
     else return  <Text>Remosk</Text>
     */
-    const [data,setData]=useState([]);
-    function getFlow()
-    {
-        //fetch("",{});
-        setData([{"time":1615637120000,"name":"一种药","description":"cow horse",id:118},{"time":1815637120000,"name":"二种药","description":"cow house",id:119}]);
-    }
-    useEffect(getFlow,[]);
-    return <>
-        <ScrollView>
-            {data.map(datap=><FlowCard {...datap} id={datap.id}/>)}
-        </ScrollView>
-    </>
+    
 }
