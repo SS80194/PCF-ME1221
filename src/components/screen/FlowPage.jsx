@@ -1,14 +1,14 @@
-import {Text,StyleSheet,Dimensions,ScrollView,View} from "react-native"
+import {Text,StyleSheet,Dimensions,ScrollView,View,Button} from "react-native"
 import {useState,useEffect,useContext} from "react"
 import styles from "../StyleSheet.js"
 import {SimpData} from "../Contexts.js"
+import {getPillList,getGridContain} from "../KVS.js"
 
 const window_width=Dimensions.get('window').width;
 const window_height=Dimensions.get('window').height;
 
 const ava_limit=30*3600*1000;
 //
-
 function bef(time_t)
 {
     //console.log(Date.now())
@@ -37,10 +37,50 @@ export function FlowPage()
     function getFlow()
     {
         //fetch("",{});
-        setData([{"time":1615637120000,"name":"一种药A","description":"cow horse",id:118},{"time":1815637120000,"name":"二种药","description":"cow house",id:119}]);
+        const flowGet=[{
+        "id":18,
+        "grid":1,
+        "count":2,
+        "time":1615637120000,
+        },{
+        "id":19,
+        "grid":2,
+        "count":1,
+        "time":1815637120000,
+        }];
+        let pill_list;
+        let grid_contain;//waiting to modify it to sync
+        getGridContain().then(gc_res=>{grid_contain=gc_res})
+        .then(()=>getPillList())
+        .then((list_res)=>{
+            pill_list=list_res;
+        }).then(()=>{
+            console.log(pill_list);
+            console.log(grid_contain);
+            const msgData=flowGet.map((res)=>({
+            id:res.id,
+            time:res.time,
+            count:res.count,
+            name:pill_list.find((obj)=>(obj.pill_id===grid_contain[res.grid])).pill_name
+            }))
+            console.log(msgData);
+            setData(msgData);
+        })
+        
+        //setData([{"time":1615637120000,"name":"一种药A","description":"cow horse",id:118},{"time":1815637120000,"name":"二种药","description":"cow house",id:119}]);
+    
     }
     useEffect(getFlow,[]);
+    function testFunction()
+    {
+        getPillList()
+        .then((res)=>{
+            console.log(res);
+        })
+        
+    }
     return <>
+        <Button title="测试" onPress={testFunction}></Button>
         <ScrollView>
             {data.map(datap=><FlowCard {...datap} id={datap.id}/>)}
         </ScrollView>
