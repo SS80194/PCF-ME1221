@@ -19,7 +19,7 @@ function bef(time_t)
 function bef_del(time_t,time_d)
 {
     //time_t
-    return (time_t<Date.now+time_d);
+    return (time_t<Date.now()+time_d);
 }
 
 function FlowCard(props)
@@ -29,6 +29,7 @@ function FlowCard(props)
     let date_string=new Date(props.time).toLocaleString();
     return <View style={[styles.container,bef(props.time)?styles.outdated:styles.coming]}>
         <Text style={styles.h2}>{props.name}</Text>
+        <Text style={styles.h2}>在盒子 {props.grid}</Text>
         <Text style={styles.p}>计划服用时间：{date_string}</Text>
         {
             bef_del(props.time,-ava_limit)?<Text style={styles.p}>已过期！</Text>:<></>
@@ -43,7 +44,7 @@ export function FlowPage()
         //fetch("",{});
         const flowGet=[{
         "id":18,
-        "grid":1,
+        "grid":3,
         "count":2,
         "time":1615637120000,
         },{
@@ -59,15 +60,18 @@ export function FlowPage()
         .then((list_res)=>{
             pill_list=list_res;
         }).then(()=>{
-            //console.log(pill_list);
-            //console.log(grid_contain);
+            console.log(pill_list);
+            console.log(grid_contain);
             const msgData=flowGet.map((res)=>({
             id:res.id,
             time:res.time,
             count:res.count,
-            name:pill_list.find((obj)=>(obj.pill_id===grid_contain[res.grid])).pill_name
+            grid:res.grid,
+            name:(grid_contain[res.grid]?pill_list[grid_contain[res.grid]].pill_name:"")
             }))
-            //console.log(msgData);
+            //console.log(grid_contain[1]);
+            console.log(pill_list[grid_contain[1]])
+            console.log(msgData);
             setData(msgData);
         })
         
@@ -94,13 +98,6 @@ export function FlowPage()
 
 export default function DatePage()
 {
-    /*
-    const DPNavigator=createDrawerNavigator();
-    const [simp,setSimp]=useContext(SimpData);
-    console.log(simp);
-    if(simp) return <FlowPage></FlowPage>
-    else return  <Text>Remosk</Text>
-    */
     const [simp,setSimp]=useContext(SimpData);
     console.log("At Flow Page "+simp);
     //setSimp(true)

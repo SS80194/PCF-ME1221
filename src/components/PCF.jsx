@@ -29,7 +29,7 @@ export default function PCF(props)
     if(isLoggedin) return <>
         <NavigationContainer>
             <MPNavigator.Navigator>
-                <MPNavigator.Screen name="Edit" options={{title:"编辑日程"}}>
+                <MPNavigator.Screen name="Edit" options={{title:"编辑药盒"}}>
                     {(props)=><EditPage {...props} />}
                 </MPNavigator.Screen>
                 <MPNavigator.Screen name="Flow" options={{title:"服药计划"}} component={DatePage}>

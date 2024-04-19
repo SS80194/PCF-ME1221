@@ -26,11 +26,11 @@ export default function MyAccPage()
         setSimp(!simpT);
         setSimpT(simpT=>!simpT);
     }
-    return <View>
-    <ScrollView>
-    <BadgerCard ></BadgerCard>
-    <Text style={styles.p}> 家长模式开关 </Text>
-    <Switch value={simpT} onValueChange={toggleSwitch}></Switch>
-    <Text>This is Account Page</Text>
+    return <View style={styles.container}>
+        <ScrollView>
+        <BadgerCard ></BadgerCard>
+        <Text style={styles.p}> 老人模式开关 </Text>
+        <Switch value={simpT} onValueChange={toggleSwitch}></Switch>
+        <Text>This is Account Page</Text>
     </ScrollView></View>
 }
