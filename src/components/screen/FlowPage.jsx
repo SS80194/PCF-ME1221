@@ -3,12 +3,14 @@ import {useState,useEffect,useContext} from "react"
 import styles from "../StyleSheet.js"
 import {SimpData} from "../Contexts.js"
 import {getPillList,getGridContain} from "../KVS.js"
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 const window_width=Dimensions.get('window').width;
 const window_height=Dimensions.get('window').height;
 
 const ava_limit=30*3600*1000;
-//
+const DrawerNavi=createDrawerNavigator();
+
 function bef(time_t)
 {
     //console.log(Date.now())
@@ -28,7 +30,9 @@ function FlowCard(props)
     return <View style={[styles.container,bef(props.time)?styles.outdated:styles.coming]}>
         <Text style={styles.h2}>{props.name}</Text>
         <Text style={styles.p}>计划服用时间：{date_string}</Text>
-        {()=>{if(bef_del(props.time,-ava_limit)) return <Text style={styles.p}>已过期！</Text>}}
+        {
+            bef_del(props.time,-ava_limit)?<Text style={styles.p}>已过期！</Text>:<></>
+        }
     </View>
 }
 export function FlowPage()
@@ -55,15 +59,15 @@ export function FlowPage()
         .then((list_res)=>{
             pill_list=list_res;
         }).then(()=>{
-            console.log(pill_list);
-            console.log(grid_contain);
+            //console.log(pill_list);
+            //console.log(grid_contain);
             const msgData=flowGet.map((res)=>({
             id:res.id,
             time:res.time,
             count:res.count,
             name:pill_list.find((obj)=>(obj.pill_id===grid_contain[res.grid])).pill_name
             }))
-            console.log(msgData);
+            //console.log(msgData);
             setData(msgData);
         })
         
@@ -81,8 +85,9 @@ export function FlowPage()
     }
     return <>
         <Button title="测试" onPress={testFunction}></Button>
+        
         <ScrollView>
-            {data.map(datap=><FlowCard {...datap} id={datap.id}/>)}
+            {data.map(datap=><FlowCard {...datap} key={datap.id}/>)}
         </ScrollView>
     </>
 }
@@ -97,9 +102,11 @@ export default function DatePage()
     else return  <Text>Remosk</Text>
     */
     const [simp,setSimp]=useContext(SimpData);
-    console.log(simp);
-    //let simp=true
-    if(!simp) return <FlowPage></FlowPage>
-    else return  <Text>Remosk</Text>
+    console.log("At Flow Page "+simp);
+    //setSimp(true)
+    if(simp) return <FlowPage></FlowPage>
+    else return(<DrawerNavi.Navigator>
+        <DrawerNavi.Screen name="卡片视图" component={FlowPage}/>
+    </DrawerNavi.Navigator>)
     //如果 not simplify 就返回一个Drawer Navigator
 }
