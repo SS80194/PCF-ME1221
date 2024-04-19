@@ -1,9 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import PCF from "./src/components/PCF"
-import {createContext,useState} from "react"
-
-export const SimpData=createContext(false);
+import {useState,useContext} from "react"
+import {SimpData} from "./src/components/Contexts"
 
 export default function App() {
   const [simp,setSimp]=useState(false);

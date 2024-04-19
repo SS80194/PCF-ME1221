@@ -1,7 +1,7 @@
 import {Text,StyleSheet,Dimensions,ScrollView,View} from "react-native"
 import {useState,useEffect,useContext} from "react"
 import styles from "../StyleSheet.js"
-
+import {SimpData} from "../Contexts.js"
 
 const window_width=Dimensions.get('window').width;
 const window_height=Dimensions.get('window').height;
@@ -37,7 +37,7 @@ export function FlowPage()
     function getFlow()
     {
         //fetch("",{});
-        setData([{"time":1615637120000,"name":"一种药","description":"cow horse",id:118},{"time":1815637120000,"name":"二种药","description":"cow house",id:119}]);
+        setData([{"time":1615637120000,"name":"一种药A","description":"cow horse",id:118},{"time":1815637120000,"name":"二种药","description":"cow house",id:119}]);
     }
     useEffect(getFlow,[]);
     return <>
@@ -56,5 +56,10 @@ export default function DatePage()
     if(simp) return <FlowPage></FlowPage>
     else return  <Text>Remosk</Text>
     */
-    
+    const [simp,setSimp]=useContext(SimpData);
+    console.log(simp);
+    //let simp=true
+    if(!simp) return <FlowPage></FlowPage>
+    else return  <Text>Remosk</Text>
+    //如果 not simplify 就返回一个Drawer Navigator
 }
