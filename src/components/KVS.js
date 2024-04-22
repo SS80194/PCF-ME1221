@@ -12,3 +12,9 @@ export async function getGridContain()
     let gridcontain=await fetch("./data/gridContain.json",{});
     return gridcontain.json();
 }
+
+export function getPhotoPlace(pill_id)
+{
+    console.log("./data/pill_"+pill_id+".png")
+    return "./data/pill_"+pill_id+".png"
+}

@@ -4,12 +4,20 @@ const styles=StyleSheet.create({
     container:{
         borderRadius:15,
         padding:15,
-        height:400,
         margin:16
     },
     card:{
         backgroundColor:'white',
         borderRadius:12,
+        margin:16,
+        height:400,
+        width:280,
+    },
+    card_msg:{
+        borderRadius:12,
+        margin:16,
+        height:400,
+        width:280,
     },
     outdated:{
         backgroundColor:"lightpink"
