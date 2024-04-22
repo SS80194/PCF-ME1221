@@ -48,7 +48,15 @@ export default function EditPage()
         }
         function submit()
         {
-            console.log(selectBox);
+            let ret=confirm("确定要把该药盒的药物修改为"+slc.label+"吗？")
+            console.log(ret);
+            if(!ret) return;
+            let gridc_stage=gridc;
+            gridc_stage[mdt]=slc.value;
+            setGc(gridc_stage)
+            //待补充：关于服药计划将要作废的逻辑，以及post到页面上。
+            props.close();
+            //alert(confirm("确定要把该药盒的药物修改为"+slc.label+"吗？"))
         }
         function handleSelection(props)
         {
@@ -61,10 +69,14 @@ export default function EditPage()
         return <View style={styles.tanchuang}>
             <Text style={styles.h2}>药盒{mdt}</Text>
             <Text style={styles.h3}>当前药物：{gridc[mdt]?pill_list[gridc[mdt]].pill_name:"空"}</Text>
-            <TextInput value={newid} onChangeText={(text)=>setNewid(text)}></TextInput>
-            <Select ref={selectBox} search={false} options={options} value={slc} onChange={handleSelection}></Select>
-            <Button title="Submit" onPress={submit} ></Button>
-            <Button title="close" onPress={props.close}></Button>
+            {/*<TextInput value={newid} onChangeText={(text)=>setNewid(text)}></TextInput>*/}
+            <Select ref={selectBox} search={false} options={options} 
+            value={slc} onChange={handleSelection} inputValue={newid} onInputChange={(text)=>setNewid(text)}></Select>
+            <View style={styles_ch.button_row}>
+                <Button title="Submit" onPress={submit} ></Button>
+                <Text style={styles.p}> </Text>
+                <Button title="close" onPress={props.close}></Button>
+            </View>
         </View>
     }
     function handlePress(props)
@@ -146,8 +158,8 @@ const styles_eb=StyleSheet.create({
     },
     modalself:{
         backgroundcolor:"yellow",
-        width:400,
-        height:400
+        width:"80%",
+        height:"80%"
     },
     modalView:{
         
@@ -168,3 +180,9 @@ const styles_eb=StyleSheet.create({
         elevation: 5
     }
 });
+const styles_ch=StyleSheet.create({
+    button_row:{
+        flex:1,
+        flexDirection:"row",
+    }
+})
