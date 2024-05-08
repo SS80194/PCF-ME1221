@@ -163,8 +163,8 @@ const styles_eb=StyleSheet.create({
     },
     modalView:{
         
-        width:400,
-        height:400,
+        width:300,
+        height:300,
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
