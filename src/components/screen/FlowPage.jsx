@@ -70,7 +70,7 @@ export function FlowPage()
             name:(grid_contain[res.grid]?pill_list[grid_contain[res.grid]].pill_name:"")
             }))
             //console.log(grid_contain[1]);
-            console.log(pill_list[grid_contain[1]])
+            //console.log(pill_list[grid_contain[1]])
             console.log(msgData);
             setData(msgData);
         })
@@ -85,8 +85,8 @@ export function FlowPage()
         .then((res)=>{
             console.log(res);
         })
-        
     }
+    //console.log("Arriving at flow page")
     return <>
         {/*<Button title="编辑" onPress={testFunction}></Button>*/}
         
@@ -99,7 +99,7 @@ export function FlowPage()
 export default function DatePage()
 {
     const [simp,setSimp]=useContext(SimpData);
-    console.log("At Flow Page "+simp);
+    //console.log("At Flow Page "+simp);
     //setSimp(true)
     if(simp) return <FlowPage></FlowPage>
     else return(<DrawerNavi.Navigator>

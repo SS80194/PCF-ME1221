@@ -1,10 +1,11 @@
 import {View,Text,StyleSheet,Pressable,Image,Modal,TextInput,Button} from "react-native"
 import Select from "react-select"
+import {SelectList} from "react-native-dropdown-select-list"
 import {useState,useEffect,useRef} from "react"
 import {getPillList,getGridContain,getPhotoPlace} from "../KVS.js"
 import {SimpData} from "../Contexts.js"
 import styles from "../StyleSheet.js"
-
+import MultiSelect from 'react-native-multiple-select';
 
 export default function EditPage()
 {
@@ -29,30 +30,26 @@ export default function EditPage()
         //console.log("关闭")
         setMdv(false);
     }
+    //PostPanel:A panel to submit changes!
     function PostPanel(props)
     {
         const[newid,setNewid]=useState(gridc[mdt]?pill_list[gridc[mdt]].pill_name:"空药盒");
         const[slc,setSlc]=useState(0);
-        const selectBox=useRef();
-        let options_stage=pill_list.length?Object.values(pill_list).map((obj)=>({value:obj.pill_id,label:obj.pill_name})):[];
-        options_stage.push({value:0,label:"清空"});
-        const[options,setOpt]=useState(options_stage);
-        function handleOptions()
-        {
-            //console.log(Object.values(pill_list));
-            let options_stage2=Object.values(pill_list).filter((obj)=>{return (!newid)||obj.pill_name.includes(newid)}).map((obj)=>({
-                value:obj.pill_id,label:obj.pill_name
-            }));
-            options_stage2.push({value:0,label:"清空"});
-            setOpt(options_stage2);
+        const[options,setOpt]=useState(makeOptions());
+        //console.log(options_stage);
+        function makeOptions(){
+            let options_t=Object.keys(pill_list).length?Object.values(pill_list).map((obj)=>({key:obj.pill_id,value:obj.pill_name})):[];
+            options_t.push({key:0,value:"清空"});
+            return options_t;
         }
+        useEffect(()=>setOpt(makeOptions()),[pill_list]);
         function submit()
         {
-            let ret=confirm("确定要把该药盒的药物修改为"+slc.label+"吗？")
-            console.log(ret);
-            if(!ret) return;
+            console.log(slc);
+            //需要一个适用于android的弹窗逻辑
+            //let ret=confirm("确定要把该药盒的药物修改为"+slc.label+"吗？")
             let gridc_stage=gridc;
-            gridc_stage[mdt]=slc.value;
+            gridc_stage[mdt]=slc;
             setGc(gridc_stage)
             //待补充：关于服药计划将要作废的逻辑，以及post到页面上。
             props.close();
@@ -64,14 +61,12 @@ export default function EditPage()
             setSlc(props);
             //console.log(value);
         }
-        useEffect(handleOptions,[newid]);
+        //useEffect(handleOptions,[newid]);
         //useEffect(()=>{console.log(options)},[options]);
-        return <View style={styles.tanchuang}>
+        return <View >
             <Text style={styles.h2}>药盒{mdt}</Text>
             <Text style={styles.h3}>当前药物：{gridc[mdt]?pill_list[gridc[mdt]].pill_name:"空"}</Text>
-            {/*<TextInput value={newid} onChangeText={(text)=>setNewid(text)}></TextInput>*/}
-            <Select ref={selectBox} search={false} options={options} 
-            value={slc} onChange={handleSelection} inputValue={newid} onInputChange={(text)=>setNewid(text)}></Select>
+            <SelectList data={options} save="key" setSelected={handleSelection}></SelectList>
             <View style={styles_ch.button_row}>
                 <Button title="Submit" onPress={submit} ></Button>
                 <Text style={styles.p}> </Text>
