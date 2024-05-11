@@ -34,7 +34,7 @@ export default function PCF(props)
                 </MPNavigator.Screen>
                 <MPNavigator.Screen name="Flow" options={{title:"服药计划"}} component={DatePage}>
                 </MPNavigator.Screen>
-                <MPNavigator.Screen name="MyAcc" options={{title:"我的账号"}}>
+                <MPNavigator.Screen name="MyAcc" options={{title:"设置",headerShown:false}}>
                     {(props)=><MyAccPage {...props} />}
                 </MPNavigator.Screen>
             </MPNavigator.Navigator>

@@ -10,8 +10,12 @@ const styles=StyleSheet.create({
         backgroundColor:'white',
         borderRadius:12,
         margin:16,
-        height:400,
-        width:280,
+        height:250,
+    },
+    card_dh:{//card with default height
+        backgroundColor:'white',
+        borderRadius:12,
+        margin:16,
     },
     card_msg:{
         borderRadius:12,
@@ -52,6 +56,15 @@ const styles=StyleSheet.create({
     img:{
         width:200,
         height:200
+    },
+    vertical:{
+        flexDirection:"column"
+    },
+    horizontal:{
+        flexDirection:"row"
+    },
+    middle:{
+        justifyContent:"center"
     }
 })
 
