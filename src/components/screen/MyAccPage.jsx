@@ -5,6 +5,7 @@ import styles from "../StyleSheet.js"
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
 import BleManager from 'react-native-ble-manager';
+import {initBLE} from "../Ble.js"
 
 //头像栏
 function BadgerCard()
@@ -31,12 +32,11 @@ function BindPage()
     const[isPairing,setPairing]=useState(false);//是否在配对
     function startSearch()//开始设置蓝牙
     {
-        if(!isPairing) return ;
-        BleManager.start({ showAlert: true }).then(() => {
-            // Success code
-            console.log("Module initialized");
-        }).catch((error)=>{console.log(error)})
-          
+        console.log(isPairing);
+        if(isPairing===false) return ;
+        //console.log("A");
+        initBLE();
+        ///console.log("B");
     }
     useEffect(startSearch,[isPairing]);
     //BindPage start from here
