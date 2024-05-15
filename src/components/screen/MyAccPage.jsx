@@ -4,7 +4,6 @@ import {useContext,useState,useEffect} from "react"
 import styles from "../StyleSheet.js"
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
-import BleManager from 'react-native-ble-manager';
 import {initBLE} from "../Ble.js"
 
 //头像栏
