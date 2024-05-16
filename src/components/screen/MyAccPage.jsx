@@ -4,7 +4,7 @@ import {useContext,useState,useEffect} from "react"
 import styles from "../StyleSheet.js"
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
-import {initBLE} from "../Ble.js"
+import {initBLE,scanBLE,manager} from "../Ble.js"
 
 //头像栏
 function BadgerCard()
@@ -16,26 +16,79 @@ function BadgerCard()
 }
 
 //蓝牙配对页面
-function MyDevice()
+function MyDevice(props)
 {
     const default_device_link="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz4aT_X0-f-P8reIpBpkvrf45-q81RfD4mVb1E6MI-dA&s";
     
-    return <View style={[styles.container,styles.card]}>
-    <Text style={styles.p}>我的设备</Text>
+    if(props.npt) return <View style={[styles.container,styles.card]}>
+    <Text style={styles.p}>我的设备 {props.device.name}</Text>
     <Image source={{uri:default_device_link}} style={styles.img}></Image>
-    
+    <Text style={styles.p}>{props.device.id}</Text>
+    {props.npt==2?<Button title="连接设备"></Button>:<></>}
+    </View>
+    else return <View style={[styles.container,styles.card]}>
+        <Text style={styles.p}>我的设备:w=not connect</Text>
     </View>
 }
 function BindPage()
 {
+    //要动个大手术
+    const [con,setCon]=useState(false);
+    const [pairing,setPairing]=useState(false);
+    const [device_info,setDev]=useState();
+    function disConnect()
+    {
+        ;
+    }
+    function getConnect()
+    {
+        ;
+    }
+    function getDevice()
+    {
+        const standard_device_name="Xiaomi Smart Band 7 CF14";let flg=false;
+        setPairing(true);
+        manager.startDeviceScan(null, null, (error, device) => {
+            if (error) {
+                console.error('扫描出错:', error);
+                return;
+            }
+            else if(device.name==standard_device_name)
+            {
+                setDev(device);flg=true;
+                console.log("找到了设备")
+                manager.stopDeviceScan();
+                setPairing(false);
+            }
+            //else if(device.name!=null) console.log(device.name);
+        });
+        //console.log(device_list);
+        setTimeout(()=>{
+            manager.stopDeviceScan();
+            setPairing(false);
+            if(!flg) console.log("没有找到设备");
+        },10000);
+    }
+    if(con) return <View style={[styles.vertical,styles.middle]}>
+        <MyDevice npt={1} device={device_info}></MyDevice>
+        <Button title="断开连接" onPress={disConnect}></Button>
+    </View>
+    else return <View style={[styles.vertical,styles.middle]}>
+        <MyDevice npt={0}></MyDevice>
+        <Button title={pairing?"正在配对":"开启配对"} onPress={getDevice}></Button>
+        {device_info?<MyDevice npt={2} device={device_info}/>:<></>}
+    </View>
+    /*
     const[isPairing,setPairing]=useState(false);//是否在配对
     function startSearch()//开始设置蓝牙
     {
         console.log(isPairing);
         if(isPairing===false) return ;
         //console.log("A");
-        initBLE();
+        //initBLE();
         ///console.log("B");
+        let ret=scanBLE()
+        console.log(ret);
     }
     useEffect(startSearch,[isPairing]);
     //BindPage start from here
@@ -54,7 +107,7 @@ function BindPage()
     </View>)
     :<></>
     }
-    </View>
+    </View>*/
 } 
 
 function BasicSettings()

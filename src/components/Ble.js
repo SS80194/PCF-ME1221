@@ -1,8 +1,8 @@
-/*
+
 
 import { BleManager } from 'react-native-ble-plx';
 
-const manager=new BleManager();
+export const manager=new BleManager();
 
 export function initBLE()
 {
@@ -15,6 +15,7 @@ export function initBLE()
     console.log('找到设备:', device.name, device.id);
 
     // 连接设备
+    /*
     manager.connectToDevice(device.id)
         .then((device) => {
             console.log('已连接到设备:', device.name);
@@ -23,6 +24,32 @@ export function initBLE()
         .catch((error) => {
             console.error('连接出错:', error);
         });
+        */
   });
 }
-*/
+
+
+export function scanBLE()
+{
+    let device_list=[];
+    manager.startDeviceScan(null, null, (error, device) => {
+        if (error) {
+            console.error('扫描出错:', error);
+            return;
+        }
+        device_list.push({name:device.name,id:device.id});
+        //console.log('找到设备:', device.name, device.id);
+        //manager.stopDeviceScan();
+    });
+    //console.log(device_list);
+    setTimeout(()=>{
+        manager.stopDeviceScan();
+        //console.log("扫描完毕");
+        device_list=device_list.filter((device)=>device.name!=null)
+        //console.log(device_list);
+        const result = Array.from(new Set(device_list.map(JSON.stringify)), JSON.parse);
+        //console.log(result);
+        device_list=result;
+    },1000);
+    return device_list;
+}

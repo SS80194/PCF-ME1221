@@ -13,7 +13,6 @@ const DrawerNavi=createDrawerNavigator();
 
 function bef(time_t)
 {
-    //console.log(Date.now())
     return (time_t<Date.now());
 }
 function bef_del(time_t,time_d)
@@ -95,7 +94,10 @@ export function FlowPage()
         </ScrollView>
     </>
 }
-
+export  function CaldPage()
+{
+    
+}
 export default function DatePage()
 {
     const [simp,setSimp]=useContext(SimpData);
@@ -104,6 +106,7 @@ export default function DatePage()
     if(simp) return <FlowPage></FlowPage>
     else return(<DrawerNavi.Navigator>
         <DrawerNavi.Screen name="卡片视图" component={FlowPage}/>
+        <DrawerNavi.Screen name="日历视图" component={CaldPage}/>
     </DrawerNavi.Navigator>)
     //如果 not simplify 就返回一个Drawer Navigator
 }
