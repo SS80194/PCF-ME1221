@@ -38,6 +38,10 @@ const styles=StyleSheet.create({
     h2:{
         fontSize:28
     },
+    h3:{
+        fontSize:20,
+        fontWeight:"bold"
+    },
     username:{
         height:40,
         width:280,
@@ -65,6 +69,16 @@ const styles=StyleSheet.create({
     },
     middle:{
         justifyContent:"center"
+    },
+    list_row:{
+        borderLeftColor:"green",
+        borderLeftWidth:1
+    },
+    flexable:{
+        flex:1
+    },
+    endplace:{
+        alignSelf: "end"
     }
 })
 

@@ -59,8 +59,8 @@ export function FlowPage()
         .then((list_res)=>{
             pill_list=list_res;
         }).then(()=>{
-            console.log(pill_list);
-            console.log(grid_contain);
+            //console.log(pill_list);
+            //console.log(grid_contain);
             const msgData=flowGet.map((res)=>({
             id:res.id,
             time:res.time,
@@ -70,7 +70,7 @@ export function FlowPage()
             }))
             //console.log(grid_contain[1]);
             //console.log(pill_list[grid_contain[1]])
-            console.log(msgData);
+            //console.log(msgData);
             setData(msgData);
         })
         
@@ -94,9 +94,79 @@ export function FlowPage()
         </ScrollView>
     </>
 }
+function dataMerge(msgData)//日期处理 稍后写
+{
+    let findata;
+    //console.log(msgData);
+    return msgData;
+}
+function CaldCard(props)
+{
+    console.log("welconme")
+    return <View style={[styles.container,styles.vertical]}>
+        <Text style={styles.h3}>日期</Text>
+        <View style={[styles.horizontal,styles.list_row]}>
+            <Text style={styles.p}>7:30 </Text>
+            <Text style={[styles.p,styles.endplace]}>{props.name} 盒子 {props.grid}</Text>
+        </View>
+        <View style={[styles.horizontal,styles.list_row]}>
+            <Text style={styles.p}>7:30 </Text>
+            <Text style={[styles.p,styles.endplace]}>麦当劳 盒子 2</Text>
+        </View>
+    </View>
+}
 export  function CaldPage()
 {
+    const [data,setData]=useState([]);
+    let grid_contain;
+    function getFlow()
+    {
+        //fetch("",{});
+        const flowGet=[{
+        "id":18,
+        "grid":3,
+        "count":2,
+        "time":1615637120000,
+        },{
+        "id":19,
+        "grid":2,
+        "count":1,
+        "time":1815637120000,
+        }];
+        let pill_list;//waiting to modify it to sync
+        getGridContain().then(gc_res=>{grid_contain=gc_res})
+        .then(()=>getPillList())
+        .then((list_res)=>{
+            pill_list=list_res;
+        }).then(()=>{
+            const msgData=flowGet.map((res)=>({
+            id:res.id,
+            time:res.time,
+            count:res.count,
+            grid:res.grid,
+            name:(grid_contain[res.grid]?pill_list[grid_contain[res.grid]].pill_name:"")
+            }))
+            setData(()=>dataMerge(msgData));
+            //console.log(msgData)
+        })
+        //Data Page
+        //setData([{"time":1615637120000,"name":"一种药A","description":"cow horse",id:118},{"time":1815637120000,"name":"二种药","description":"cow house",id:119}]);
     
+    }
+    useEffect(getFlow,[]);
+    console.log(data);
+    return <View style={styles.vertical}>
+        <View style={styles.horizontal}>
+            <Text style={styles.p}>日程</Text>
+            <Button title="+"></Button>
+        </View>
+        <View style={styles.vertical}>
+        {
+            data.map(datap=><CaldCard {...datap} key={datap.id}/>)
+        }
+        </View>
+        <></>
+    </View>
 }
 export default function DatePage()
 {
