@@ -35,9 +35,17 @@ async function getMsg()//get Messages and
     "grid":2,
     "count":1,
     "time":1815637120000,
+    },{
+    "id":20,
+    "grid":4,
+    "count":1,
+    "time":1815637120191,
     }];
     return flowGet;
 }
+
+
+//--------------------Flow Page Start----------------------------
 function FlowCard(props)
 {
     //console.log(props.time)
@@ -52,7 +60,6 @@ function FlowCard(props)
         }
     </View>
 }
-//--------------------Flow Page Start----------------------------
 export function FlowPage()
 {
     const [data,setData]=useState([]);
@@ -93,28 +100,59 @@ export function FlowPage()
 
 
 //--------------------Cald Page Start----------------------------
+function getDt(timestamp)
+{
+    const date = new Date(timestamp);
+    return {
+        year:date.getFullYear(),
+        month:date.getMonth()+1,
+        day:date.getDate(),
+        hour:date.getHours(),
+        minute:date.getMinutes()
+    };
+}
+function sameDay(timestamp_1,timestamp_2)
+{
+    const dt1=getDt(timestamp_1);
+    const dt2=getDt(timestamp_2);
+    return(dt1.year===dt2.year&&dt1.month===dt2.month&&dt1.day===dt2.day)
+}
 function dataMerge(msgData)//日期处理 稍后写
 {
-    let findata;
-    //console.log(msgData);
-    return msgData;
+    let newData=[];
+    for(let i=0;i<msgData.length;i++){console.log(getDt(msgData[i].time))}
+    for(let i=0;i<msgData.length;i++)
+    {
+        if(i==0||!sameDay(msgData[i].time,msgData[i-1].time))
+            newData.push([msgData[i]]);
+        else newData[newData.length-1].push(msgData[i]);
+    }
+    console.log(newData);
+    return newData;
+}
+function MsgList(props)
+{
+    //console.log(props)
+    const cor_date=getDt(props.time);
+    return <View>
+        <View style={[styles.horizontal,styles.list_row]}>
+            <Text style={styles.p}> {cor_date.hour}:{cor_date.minute<10?"0":""}{cor_date.minute} </Text>
+            <Text style={[styles.p,styles.endplace]}>{props.name} 盒子 {props.grid}</Text>
+        </View>
+    </View>
 }
 function CaldCard(props)
 {
     //data Format: time,count grid pill_name
+    const cor_date=getDt(props.arr[0].time);
     return <View style={[styles.container,styles.vertical]}>
-        <Text style={styles.h3}>日期</Text>
-        <View style={[styles.horizontal,styles.list_row]}>
-            <Text style={styles.p}>7:30 </Text>
-            <Text style={[styles.p,styles.endplace]}>{props.name} 盒子 {props.grid}</Text>
-        </View>
-        <View style={[styles.horizontal,styles.list_row]}>
-            <Text style={styles.p}>7:30 </Text>
-            <Text style={[styles.p,styles.endplace]}>麦当劳 盒子 2</Text>
-        </View>
+    <Text style={styles.h3}>{cor_date.year}年{cor_date.month}月{cor_date.day}日</Text>
+    {
+        props.arr.map(prop=><MsgList {...prop} id={prop.id}/>)
+    }
     </View>
 }
-export  function CaldPage()
+export function CaldPage()
 {
     const [data,setData]=useState([]);
     function getFlow()
@@ -140,12 +178,16 @@ export  function CaldPage()
         </View>
         <View style={styles.vertical}>
         {
-            data.map(datap=><CaldCard {...datap} key={datap.id}/>)
+            data.map(datap=><CaldCard arr={datap} key={datap[0].id}/>)
         }
         </View>
         <></>
     </View>
 }
+
+//-----------------------------Cald Page End-----------------------------
+
+//-----------------------------Navigation Page Start-----------------------------
 export default function DatePage()
 {
     const [simp,setSimp]=useContext(SimpData);
