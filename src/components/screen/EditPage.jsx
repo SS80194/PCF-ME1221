@@ -1,4 +1,4 @@
-import {View,Text,StyleSheet,Pressable,Image,Modal,TextInput,Button} from "react-native"
+import {View,Text,StyleSheet,Pressable,Image,Modal,TextInput,Button,ScrollView} from "react-native"
 import Select from "react-select"
 import {SelectList} from "react-native-dropdown-select-list"
 import {useState,useEffect,useRef} from "react"
@@ -61,8 +61,6 @@ export default function EditPage()
             setSlc(props);
             //console.log(value);
         }
-        //useEffect(handleOptions,[newid]);
-        //useEffect(()=>{console.log(options)},[options]);
         return <View >
             <Text style={styles.h2}>药盒{mdt}</Text>
             <Text style={styles.h3}>当前药物：{gridc[mdt]?pill_list[gridc[mdt]].pill_name:"空"}</Text>
@@ -84,46 +82,42 @@ export default function EditPage()
     //单个的药盒大小
     function GridCard(props)
     {
-        //console.log("Remosk");
-        //console.log(props);
-        //console.log(pill_list[props.pill_id]);
+        //if(props.box_id<=1) return <></>
         return <Pressable onPress={()=>handlePress(props.box_id)}>
         <View style={[styles.card,styles_eb.cotc]}>
-        {
-            props.pill_id?
-            <Text style={styles.h1}>{pill_list[props.pill_id].pill_name}</Text>
-            :<Text style={styles.h1}>空药盒</Text>
-        }
-        {
-            //图片功能有点问题！
-            //<Image styles={styles_eb.pic} source={()=>{getPhotoPlace(props.pill_id)}}></Image>
-        }
-        
-        <View style={styles.container}>
-            <Text styles={styles.p}>点击进行编辑</Text>
-        </View>
+            {
+                props.pill_id?
+                <Text style={styles.h1}>{pill_list[props.pill_id].pill_name}</Text>
+                :<Text style={styles.h1}>空药盒</Text>
+            }
+
+            <View style={styles.container}>
+                <Text styles={styles.p}>点击进行编辑</Text>
+            </View>
 
         </View>
         </Pressable>
     }
     useEffect(InitBoxes,[]);
     //console.log(Object.entries(gridc));
-    return <View style={styles.container}>
-        <View style={styles_eb.container}>
-        {
-            Object.entries(gridc).map((grid)=>
+    return <View style={[styles.container,styles.flexable,styles.vertical]}>
+        <ScrollView>
+            <View >
+            {
+                Object.entries(gridc).map((grid)=>
                 <GridCard 
                     key={grid[0]}
                     box_id={grid[0]}
                     pill_id={grid[1]}
                 />)
-        }
-        </View>
+            }
+            </View>
+        </ScrollView>
         <Modal style={styles_eb.modalself} transparent={true} visible={mdv} onRequestClose={closeModal}>
             
         <View style={{alignItems:"center",justifyContent:"center"}}><View style={[styles_eb.modalView]}>
-                <PostPanel close={closeModal}></PostPanel>
-            </View></View>
+            <PostPanel close={closeModal}></PostPanel>
+        </View></View>
         </Modal>
         
     </View>
@@ -140,7 +134,7 @@ const styles_eb=StyleSheet.create({
         flex:1,
         flexDirection:"column",
         alignItems:"center",
-        minHeight:200,
+        minHeight:100,
     },
     pic:{
         width:"80%",
@@ -149,7 +143,7 @@ const styles_eb=StyleSheet.create({
     centeredView:{
         justifyContent:"center",
         alignItems:"center",
-        minHeight:200,
+        minHeight:100,
         //position:"absolute"
     },
     modalself:{

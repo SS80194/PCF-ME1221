@@ -10,7 +10,7 @@ const styles=StyleSheet.create({
         backgroundColor:'white',
         borderRadius:12,
         margin:16,
-        height:250,
+        height:150,
     },
     card_dh:{//card with default height
         backgroundColor:'white',
