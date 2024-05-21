@@ -3,10 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import PCF from "./src/components/PCF"
 import {useState,useContext,useEffect} from "react"
 import {SimpData} from "./src/components/Contexts"
+import {initArrays} from "./src/components/KVS.js"
 
 export default function App() {
   const [simp,setSimp]=useState(false);
-  //useEffect(initBLE,[]);
+  useEffect(initArrays,[]);
   return (
     <SimpData.Provider value={[simp,setSimp]}>
       <PCF></PCF>

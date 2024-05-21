@@ -1,5 +1,13 @@
 import {useState} from "react"
 
+export let pill_list,grid_contain;
+
+export function initArrays()
+{
+    getPillList().then((res)=>{pill_list=res});
+    getGridContain().then((res)=>{grid_contain=res});
+}
+
 export async function getPillList()
 {
     const pilllist_mem={

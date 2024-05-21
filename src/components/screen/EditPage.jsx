@@ -96,8 +96,9 @@ export default function EditPage()
         }
         {
             //图片功能有点问题！
+            //<Image styles={styles_eb.pic} source={()=>{getPhotoPlace(props.pill_id)}}></Image>
         }
-        <Image styles={styles_eb.pic} source={()=>{getPhotoPlace(props.pill_id)}}></Image>
+        
         <View style={styles.container}>
             <Text styles={styles.p}>点击进行编辑</Text>
         </View>

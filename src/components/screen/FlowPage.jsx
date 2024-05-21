@@ -2,7 +2,7 @@ import {Text,StyleSheet,Dimensions,ScrollView,View,Button} from "react-native"
 import {useState,useEffect,useContext} from "react"
 import styles from "../StyleSheet.js"
 import {SimpData} from "../Contexts.js"
-import {getPillList,getGridContain} from "../KVS.js"
+import {pill_list,grid_contain,getPillList,getGridContain} from "../KVS.js"
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 const window_width=Dimensions.get('window').width;
@@ -20,7 +20,24 @@ function bef_del(time_t,time_d)
     //time_t
     return (time_t<Date.now()+time_d);
 }
+async function getMsg()//get Messages and 
+{
+    if(!pill_list) await getPillList();
+    if(!grid_contain) await getGridContain();
 
+    const flowGet=[{
+    "id":18,
+    "grid":3,
+    "count":2,
+    "time":1615637120000,
+    },{
+    "id":19,
+    "grid":2,
+    "count":1,
+    "time":1815637120000,
+    }];
+    return flowGet;
+}
 function FlowCard(props)
 {
     //console.log(props.time)
@@ -35,32 +52,13 @@ function FlowCard(props)
         }
     </View>
 }
+//--------------------Flow Page Start----------------------------
 export function FlowPage()
 {
     const [data,setData]=useState([]);
     function getFlow()
     {
-        //fetch("",{});
-        const flowGet=[{
-        "id":18,
-        "grid":3,
-        "count":2,
-        "time":1615637120000,
-        },{
-        "id":19,
-        "grid":2,
-        "count":1,
-        "time":1815637120000,
-        }];
-        let pill_list;
-        let grid_contain;//waiting to modify it to sync
-        getGridContain().then(gc_res=>{grid_contain=gc_res})
-        .then(()=>getPillList())
-        .then((list_res)=>{
-            pill_list=list_res;
-        }).then(()=>{
-            //console.log(pill_list);
-            //console.log(grid_contain);
+        getMsg().then((flowGet)=>{
             const msgData=flowGet.map((res)=>({
             id:res.id,
             time:res.time,
@@ -68,16 +66,13 @@ export function FlowPage()
             grid:res.grid,
             name:(grid_contain[res.grid]?pill_list[grid_contain[res.grid]].pill_name:"")
             }))
-            //console.log(grid_contain[1]);
-            //console.log(pill_list[grid_contain[1]])
-            //console.log(msgData);
             setData(msgData);
         })
         
         //setData([{"time":1615637120000,"name":"一种药A","description":"cow horse",id:118},{"time":1815637120000,"name":"二种药","description":"cow house",id:119}]);
     
     }
-    useEffect(getFlow,[]);
+    useEffect(getFlow,[]);useEffect(getFlow,[grid_contain,pill_list]);
     function testFunction()
     {
         getPillList()
@@ -94,6 +89,10 @@ export function FlowPage()
         </ScrollView>
     </>
 }
+//--------------------Flow Page End----------------------------
+
+
+//--------------------Cald Page Start----------------------------
 function dataMerge(msgData)//日期处理 稍后写
 {
     let findata;
@@ -102,7 +101,7 @@ function dataMerge(msgData)//日期处理 稍后写
 }
 function CaldCard(props)
 {
-    console.log("welconme")
+    //data Format: time,count grid pill_name
     return <View style={[styles.container,styles.vertical]}>
         <Text style={styles.h3}>日期</Text>
         <View style={[styles.horizontal,styles.list_row]}>
@@ -118,27 +117,10 @@ function CaldCard(props)
 export  function CaldPage()
 {
     const [data,setData]=useState([]);
-    let grid_contain;
     function getFlow()
     {
         //fetch("",{});
-        const flowGet=[{
-        "id":18,
-        "grid":3,
-        "count":2,
-        "time":1615637120000,
-        },{
-        "id":19,
-        "grid":2,
-        "count":1,
-        "time":1815637120000,
-        }];
-        let pill_list;//waiting to modify it to sync
-        getGridContain().then(gc_res=>{grid_contain=gc_res})
-        .then(()=>getPillList())
-        .then((list_res)=>{
-            pill_list=list_res;
-        }).then(()=>{
+        getMsg().then((flowGet)=>{
             const msgData=flowGet.map((res)=>({
             id:res.id,
             time:res.time,
@@ -147,14 +129,10 @@ export  function CaldPage()
             name:(grid_contain[res.grid]?pill_list[grid_contain[res.grid]].pill_name:"")
             }))
             setData(()=>dataMerge(msgData));
-            //console.log(msgData)
-        })
-        //Data Page
-        //setData([{"time":1615637120000,"name":"一种药A","description":"cow horse",id:118},{"time":1815637120000,"name":"二种药","description":"cow house",id:119}]);
-    
+        })    
     }
-    useEffect(getFlow,[]);
-    console.log(data);
+    useEffect(getFlow,[]);useEffect(getFlow,[grid_contain,pill_list]);
+    //console.log(data);
     return <View style={styles.vertical}>
         <View style={styles.horizontal}>
             <Text style={styles.p}>日程</Text>
