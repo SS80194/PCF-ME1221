@@ -137,7 +137,7 @@ function MsgList(props)
     return <View>
         <View style={[styles.horizontal,styles.list_row]}>
             <Text style={styles.p}> {cor_date.hour}:{cor_date.minute<10?"0":""}{cor_date.minute} </Text>
-            <Text style={[styles.p,styles.endplace]}>{props.name} 盒子 {props.grid}</Text>
+            <Text style={[styles.p]}>{props.name} 盒子 {props.grid}</Text>
         </View>
     </View>
 }
