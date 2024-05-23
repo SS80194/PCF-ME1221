@@ -114,10 +114,11 @@ export default function EditPage()
             </View>
         </ScrollView>
         <Modal style={styles_eb.modalself} transparent={true} visible={mdv} onRequestClose={closeModal}>
-            
-        <View style={{alignItems:"center",justifyContent:"center"}}><View style={[styles_eb.modalView]}>
-            <PostPanel close={closeModal}></PostPanel>
-        </View></View>
+            <View style={{alignItems:"center",justifyContent:"center"}}>
+                <View style={[styles_eb.modalView]}>
+                    <PostPanel close={closeModal}></PostPanel>
+                </View>
+            </View>
         </Modal>
         
     </View>

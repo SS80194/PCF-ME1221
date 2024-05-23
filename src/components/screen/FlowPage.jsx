@@ -4,6 +4,7 @@ import styles from "../StyleSheet.js"
 import {SimpData} from "../Contexts.js"
 import {pill_list,grid_contain,getPillList,getGridContain} from "../KVS.js"
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import Popup from "../resources/Popup.jsx"
 
 const window_width=Dimensions.get('window').width;
 const window_height=Dimensions.get('window').height;
@@ -84,7 +85,7 @@ export function FlowPage()
     {
         getPillList()
         .then((res)=>{
-            console.log(res);
+            //console.log(res);
         })
     }
     //console.log("Arriving at flow page")
@@ -117,17 +118,16 @@ function sameDay(timestamp_1,timestamp_2)
     const dt2=getDt(timestamp_2);
     return(dt1.year===dt2.year&&dt1.month===dt2.month&&dt1.day===dt2.day)
 }
-function dataMerge(msgData)//日期处理 稍后写
+function dataMerge(msgData)//日期处理
 {
     let newData=[];
-    for(let i=0;i<msgData.length;i++){console.log(getDt(msgData[i].time))}
+    //for(let i=0;i<msgData.length;i++){console.log(getDt(msgData[i].time))}
     for(let i=0;i<msgData.length;i++)
     {
         if(i==0||!sameDay(msgData[i].time,msgData[i-1].time))
             newData.push([msgData[i]]);
         else newData[newData.length-1].push(msgData[i]);
     }
-    console.log(newData);
     return newData;
 }
 function MsgList(props)
@@ -155,6 +155,13 @@ function CaldCard(props)
 export function CaldPage()
 {
     const [data,setData]=useState([]);
+    const [add,setAdd]=useState(false);
+
+    function closeAdd()
+    {
+        setAdd(false)
+    }
+
     function getFlow()
     {
         //fetch("",{});
@@ -174,18 +181,30 @@ export function CaldPage()
     return <View style={styles.vertical}>
         <View style={styles.horizontal}>
             <Text style={styles.p}>日程</Text>
-            <Button title="+"></Button>
+            <Button title="+" onPress={()=>setAdd(true)}></Button>
         </View>
         <View style={styles.vertical}>
         {
             data.map(datap=><CaldCard arr={datap} key={datap[0].id}/>)
         }
         </View>
-        <></>
+        <View style={[styles.vertical,styles.flexable,styles.bot]}>
+        {
+            // 
+            <Popup ActualComp={AddPage} visible={add} closeModal={closeAdd}/>
+        }    
+        </View>   
     </View>
 }
 
 //-----------------------------Cald Page End-----------------------------
+
+//------------------------------AddPage1 Start------------------------------
+function AddPage()
+{
+    return <Text style={styles.p}> Renoot</Text>
+}
+//------------------------------AddPage1 End------------------------------
 
 //-----------------------------Navigation Page Start-----------------------------
 export default function DatePage()

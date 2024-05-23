@@ -70,6 +70,9 @@ const styles=StyleSheet.create({
     middle:{
         justifyContent:"center"
     },
+    middle_c:{
+        alignItems:"center"
+    },
     list_row:{
         borderLeftColor:"green",
         borderLeftWidth:1
@@ -79,6 +82,9 @@ const styles=StyleSheet.create({
     },
     endplace:{
         alignSelf: "end"
+    },
+    bot:{
+        justifyContent:"flex-end"
     }
 })
 
