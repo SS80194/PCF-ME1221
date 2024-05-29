@@ -1,4 +1,4 @@
-import {View,Modal,StyleSheet,Button} from "react-native" 
+import {View,Modal,StyleSheet,Button,Text} from "react-native" 
 import {useState} from "react"
 import styles from "../StyleSheet.js"
 
@@ -35,11 +35,12 @@ You need to Provide:
 export function ConfirmPopup(props)
 {
     //const [mdv,setMdv] = useState(false);
-    return <Modal transparent={true} visible={props.mdv}>
-      <View style={[styles.vertical,styles.middle]}>
+    //console.log(props.infotext);
+    return <Modal transparent={false} visible={props.mdv}>
+      <View style={[styles.vertical,styles.middle,styles.flexable]}>
         <View style={[styles.littlePopup,styles.middle_c]}>
           <Text style={styles.h1}>提醒</Text>
-          <Text style={styles.p}>{infotext}</Text>
+          <Text style={styles.p}>{props.infotext}</Text>
           <View style={[styles.horizontal,styles.middle]}>
             <Button title="确认" color="green" onPress={props.callFunc}/>
             <Button title="取消" color="grey" onPress={props.closeModal}/>

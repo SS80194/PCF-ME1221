@@ -1,4 +1,4 @@
-import {useState} from "react"
+import {useState,useEffect} from "react"
 import {Text,StyleSheet,Container} from "react-native"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
@@ -6,6 +6,7 @@ import EditPage from './screen/EditPage'
 import DatePage,{FlowPage} from './screen/FlowPage'
 import MyAccPage from './screen/MyAccPage'
 import LoginPage from "./screen/LoginPage"
+import {initArrays} from "./KVS.js"
 
 const MPNavigator=createBottomTabNavigator();
 export default function PCF(props)
@@ -13,7 +14,7 @@ export default function PCF(props)
     const [isLoggedin,setLoggedin]=useState(true);
     //Before release set it to false
     const [isRegistering,setRegistering]=useState(false);
-    
+    //useEffect(initArrays,[]);
     function handleLogin(username,passwd)
     {
         //fetch(,{})

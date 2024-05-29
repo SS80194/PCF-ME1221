@@ -1,9 +1,16 @@
 import {useState} from "react"
 
+export const default_gc={
+    "1":0,
+    "2":0,
+    "3":0,
+    "4":0
+}
 export let pill_list,grid_contain;
 
 export function initArrays()
 {
+    //console.log("refreshing");
     getPillList().then((res)=>{pill_list=res});
     getGridContain().then((res)=>{grid_contain=res});
 }
@@ -41,6 +48,7 @@ export async function getPillList()
 
 export async function getGridContain()
 {
+    /*
     const gridc_mem={
         "1":0,
         "2":3,
@@ -48,10 +56,34 @@ export async function getGridContain()
         "4":2
     }
     return gridc_mem;
+    */
+    if(grid_contain) return grid_contain;
+    else
+    {
+        let gridc_mem={
+            "1":0,
+            "2":3,
+            "3":1,
+            "4":2
+        };
+        grid_contain=gridc_mem;
+        return grid_contain;
+    }
     /*
     let gridcontain=await fetch("./data/gridContain.json",{});
     return gridcontain.json();
     */
+}
+
+
+export async function setPillList()
+{
+    //希望不需要yongdaota
+    //
+}
+export async function setGridContain(newgc)
+{
+    grid_contain=newgc;
 }
 
 export function getPhotoPlace(pill_id)
