@@ -20,7 +20,7 @@ function PostPanel(props)
 {
     let box_id=props.box_id;
     const[newid,setNewid]=useState(grid_contain[box_id]?pill_list[grid_contain[box_id]].pill_name:"空药盒");
-    const[slc,setSlc]=useState(0);
+    const[slc,setSlc]=useState(grid_contain[box_id]);
     const[options,setOpt]=useState(makeOptions());
     function makeOptions(){
         let options_t=Object.keys(pill_list).length?Object.values(pill_list).map((obj)=>({key:obj.pill_id,value:obj.pill_name})):[];
@@ -46,13 +46,11 @@ function PostPanel(props)
 
     function getMsg()
     {
-        if(!slc||!pill_list) return "";
-        return "确定要把该药盒的药物修改为"+pill_list[slc].pill_name+"吗？";
+        if(!slc) return "确定清空该药盒中的药物吗？";
+        else return "确定要把该药盒的药物修改为"+pill_list[slc].pill_name+"吗？";
     }
     function submit()
     {
-        warn_msg="确定要把该药盒的药物修改为"+pill_list[slc].pill_name+"吗？"
-        //console.log(warn_msg);
         setCof(true);
     }
     function handleSelection(props)
@@ -65,22 +63,56 @@ function PostPanel(props)
         <Text style={styles.h2}>药盒{box_id}</Text>
         <Text style={styles.h3}>当前药物：{grid_contain[box_id]?pill_list[grid_contain[box_id]].pill_name:"空"}</Text>
         <SelectList data={options} save="key" setSelected={handleSelection}></SelectList>
-        <View style={styles_ch.button_row}>
-            <Button title="Submit" onPress={submit} ></Button>
-            <Text style={styles.p}> </Text>
-            <Button title="close" onPress={props.close}></Button>
+        <View>
+        {
+            slc?<View>
+                <Text style={styles.h3}>{slc?"选定："+pill_list[slc].pill_name:"未选中"}</Text>
+                <Text style={styles.h3}></Text>
+                <Text style={styles.h3}>药物介绍:</Text>
+                <Text style={styles.p}>{pill_list[slc].pill_description}</Text>
+            </View>
+            :<View>
+                <Text style={styles.h3}>未选中任何药物</Text>
+            </View>
+        }
         </View>
+
+        <View style={[styles.bot2,styles_ch.button_row,styles_eb.heightlim]}>
+            <Button title="提交" onPress={submit} disabled={grid_contain[box_id]==slc}></Button>
+            <Text style={styles.p}> </Text>
+            <Button title="取消" onPress={props.close}></Button>
+        </View>
+
         <View style={[styles.vertical,styles.flexable,styles.bot]}>
             <ConfirmPopup callFunc={callFunc} closeModal={closeCof} infotext={getMsg()} mdv={cof}/>
         </View>
         
     </View>
-    
-   //return <Text>Renot</Text>
 }
 
 
-//-------------------------------Edit Page-------------------------------
+//-------------------------------Edit Page Start-------------------------------
+function BoardCard(props)
+{
+    const style_bd=StyleSheet.create({
+        frame:{
+            backgroundColor:"#FFF0CB",
+            width:30,
+            height:30,
+            position:"absolute",
+            bottom:4,
+            right:4,
+            borderRadius:6,
+        },
+        texts:{
+            color:"#2D00B5"
+        }
+    });
+    return <View style={[style_bd.frame,styles.middle,styles.middle_c]}>
+        <Text style={[styles.h3,style_bd.texts]}>{props.num}</Text>
+    </View>
+}
+
 function GridCard(props)
 {
     //if(props.box_id<=1) return <></>
@@ -90,7 +122,7 @@ function GridCard(props)
         {
             pill_list?(
             (props.pill_id)?
-            <Text style={styles.h1}>{pill_list[props.pill_id].pill_name}</Text>
+            <Text style={styles.h2}>{pill_list[props.pill_id].pill_name}</Text>
             :<Text style={styles.h1}>空药盒</Text>)
             :<Text style={styles.p}>pill_list unready</Text>
         }
@@ -98,7 +130,7 @@ function GridCard(props)
         <View style={styles.container}>
             <Text styles={styles.p}>点击进行编辑</Text>
         </View>
-
+        <BoardCard num={props.box_id}/>
     </View>
     </Pressable>
     
@@ -126,7 +158,7 @@ export default function EditPage()
     //handlePress:The function to open the specified EditModal
     function handlePress(props){console.log("renoot");setMdv(true);setMdt(props);}
     
-    console.log(gridc);
+    //console.log(gridc);
     //if(gridc) console.log(Object.entries(gridc));
     return <View style={[styles.container,styles.flexable,styles.vertical]}>
         <ScrollView>
@@ -145,7 +177,7 @@ export default function EditPage()
             }
             </View>
         </ScrollView>
-        <Modal style={styles_eb.modalself} transparent={true} visible={mdv} onRequestClose={closeModal}>
+        <Modal transparent={true} visible={mdv} onRequestClose={closeModal}>
             <View style={{alignItems:"center",justifyContent:"center"}}>
                 <View style={[styles_eb.modalView]}>
                         <PostPanel close={closeModal} box_id={mdt}></PostPanel>
@@ -155,6 +187,7 @@ export default function EditPage()
         
     </View>
 }
+//-------------------------------Edit Page End-------------------------------
 
 
 //-------------------------------StyleSheets-------------------------------
@@ -170,7 +203,7 @@ const styles_eb=StyleSheet.create({
         flex:1,
         flexDirection:"column",
         alignItems:"center",
-        minHeight:100,
+        minHeight:150,
     },
     pic:{
         width:"80%",
@@ -189,8 +222,8 @@ const styles_eb=StyleSheet.create({
     },
     modalView:{
         
-        width:300,
-        height:300,
+        width:"90%",
+        height:"90%",
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
@@ -204,6 +237,9 @@ const styles_eb=StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5
+    },
+    heightlim:{
+        height:40
     }
 });
 const styles_ch=StyleSheet.create({

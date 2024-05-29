@@ -85,6 +85,10 @@ const styles=StyleSheet.create({
     },
     bot:{
         justifyContent:"flex-end"
+    },
+    bot2:{
+        position:"absolute",
+        bottom:20
     }
 })
 

@@ -36,11 +36,12 @@ export function ConfirmPopup(props)
 {
     //const [mdv,setMdv] = useState(false);
     //console.log(props.infotext);
-    return <Modal transparent={false} visible={props.mdv}>
-      <View style={[styles.vertical,styles.middle,styles.flexable]}>
-        <View style={[styles.littlePopup,styles.middle_c]}>
+    return <Modal transparent={true} visible={props.mdv}>
+      <View style={[styles.vertical,styles.middle,styles.middle_c,styles.flexable,styles_pu.modalbg]}>
+        <View style={[styles_pu.littlePopup,styles.middle_c]}>
           <Text style={styles.h1}>提醒</Text>
           <Text style={styles.p}>{props.infotext}</Text>
+          <Text style={styles.p}></Text>
           <View style={[styles.horizontal,styles.middle]}>
             <Button title="确认" color="green" onPress={props.callFunc}/>
             <Button title="取消" color="grey" onPress={props.closeModal}/>
@@ -55,6 +56,9 @@ const styles_pu=StyleSheet.create({
         backgroundcolor:"yellow",
         width:"80%",
         height:"80%"
+    },
+    modalbg:{
+        
     },
     modalView:{
         width:"100%",
@@ -74,8 +78,8 @@ const styles_pu=StyleSheet.create({
         elevation: 5
     },
     littlePopup:{
-        width:"60%",
-        height:"20%",
+        width:"70%",
+        height:"30%",
         backgroundColor: "white",
         borderRadius: 20,
         padding: 35,
