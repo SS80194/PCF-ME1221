@@ -1,9 +1,11 @@
-import {Text,StyleSheet,Dimensions,ScrollView,View,Button} from "react-native"
+import {Text,StyleSheet,Dimensions,ScrollView,View,Button,Pressable,Modal} from "react-native"
 import {useState,useEffect,useContext} from "react"
 import styles from "../StyleSheet.js"
 import {SimpData} from "../Contexts.js"
 import {pill_list,grid_contain,getPillList,getGridContain} from "../KVS.js"
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import DatePicker from 'react-native-date-picker'
+import {Slider} from '@miblanchard/react-native-slider';
 import Popup from "../resources/Popup.jsx"
 
 const window_width=Dimensions.get('window').width;
@@ -189,20 +191,58 @@ export function CaldPage()
         }
         </View>
         <View style={[styles.vertical,styles.flexable,styles.bot]}>
-        {
-            // 
-            <Popup ActualComp={AddPage} visible={add} closeModal={closeAdd}/>
-        }    
+          <Modal transparent={true} visible={add} onRequestClose={closeAdd}>
+            <View style={[styles.vertical,styles.flexable,styles.bot,styles.middle_c]}>
+              <View style={[styles_pz.modalView]}>
+                <AddPage/>
+                <View style={[styles.bot2,styles.horizontal]}>
+                    <Button title="保存"/>
+                    <Button title="取消" onPress={closeAdd}/>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </View>   
     </View>
 }
 
 //-----------------------------Cald Page End-----------------------------
 
-//------------------------------AddPage1 Start------------------------------
+//------------------------------AddPage&TimePage Start------------------------------
+function RowTwoContent(props)
+{
+    return <View style={[styles.horizontal,{width:250,height:36},styles.middle,styles.flexable_n]}>
+        <Text style={[styles.p,styles.abs,{left:3}]}>{props.text1}</Text>
+        <Text style={[styles.p,styles.abs,{right:3}]}>{props.text2}</Text>
+    </View>
+}
 function AddPage()
 {
-    return <Text style={styles.p}> Renoot</Text>
+    const [time_vis,setTv]=useState(false);//time_visable 用来判断是否显示。
+    const [date,setDate]=useState(new Date());
+    const [repeat,setRpt]=useState(1);
+    function closeTp(){setTv(false);}
+    function openTp(){setTv(true);}
+    return <View style={[styles.flexable,styles.vertical,styles.middle_c]}>
+        <Text style={styles.h2}>编辑日程</Text>
+        <Pressable onPress={()=>setTv(true)}>
+            <RowTwoContent text1="日期/时间" text2={date.toLocaleString()}/>
+        </Pressable>
+        <RowTwoContent text1="重复" text2={repeat}/>
+        <Slider minimumValue={1} maximumValue={7} step={1}
+          value={repeat} onValueChange={(val)=>setRpt(val)}
+        ></Slider>
+        <View style={[styles.vertical,styles.flexable,styles.bot]}>
+        {
+            //修这个DatePicker的CSS。
+            <DatePicker modal open={time_vis} mode="datetime" date={date}
+                onConfirm={(res)=>{setDate(res);console.log(date.toLocaleString());closeTp();}}
+                onCancel={closeTp}
+            />
+        }
+        </View>   
+
+    </View>
 }
 //------------------------------AddPage1 End------------------------------
 
@@ -219,3 +259,26 @@ export default function DatePage()
     </DrawerNavi.Navigator>)
     //如果 not simplify 就返回一个Drawer Navigator
 }
+//-----------------------------Navigation Page End-----------------------------
+
+
+//-----------------------------StyleSheet Start-----------------------------
+const styles_pz=StyleSheet.create({
+    modalView:{
+        width:"100%",
+        height:"80%",
+        //margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+        width: 0,
+        height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+})

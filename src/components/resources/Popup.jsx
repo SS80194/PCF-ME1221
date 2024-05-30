@@ -17,7 +17,10 @@ export default function Popup(props)
                 {
                     props.ActualComp()
                 }
-                <Button title="Close" onPress={props.closeModal}></Button>
+                <View style={[styles.bot2,styles.horizontal]}>
+                    <Button title="保存"/>
+                    <Button title="取消" onPress={props.closeModal}/>
+                </View>
             </View>
         </View>
     </Modal>

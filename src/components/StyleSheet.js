@@ -80,6 +80,9 @@ const styles=StyleSheet.create({
     flexable:{
         flex:1
     },
+    flexable_n:{
+        flex:0
+    },
     endplace:{
         alignSelf: "end"
     },
@@ -89,6 +92,12 @@ const styles=StyleSheet.create({
     bot2:{
         position:"absolute",
         bottom:20
+    },
+    abs:{
+        position:"absolute"
+    },
+    bdb:{
+        borderWidth:1
     }
 })
 
